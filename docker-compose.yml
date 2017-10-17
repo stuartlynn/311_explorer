@@ -1,0 +1,21 @@
+version: '3'
+services:
+  db:
+    image: postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+  dataprep:
+    image: python:3 
+    depends_on:
+      - db
+  airflow:
+    image: puckel/docker-airflow
+    ports:
+      - 5555:8080
+    depends_on:
+      - db
+    volumes:
+      - ./dags:/usr/local/airflow/dags
+      - ./data:/data/
+volumes:
+  pgdata: {}    
